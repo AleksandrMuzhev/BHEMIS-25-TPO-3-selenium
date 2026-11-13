@@ -1,0 +1,27 @@
+name: Testing 
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Проверяем на наличие изменений
+        uses: actions/checkout@v4
+
+      - name: Установка python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Установить зависимости
+        run: pip install -r requirements.txt
+
+      - name: Линтинг
+        run: flake8 tests/ data/ pages/ --exclude=.venv/
+
+      - name: Тестирование
+        run: python -m pytest tests/
